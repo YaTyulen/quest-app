@@ -1,13 +1,14 @@
-import { StyleSheet, Text, SafeAreaView, Button } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Button, View } from 'react-native';
 
 import { Input } from '@rneui/themed';
 import { useState } from 'react';
-import { View } from 'react-native-web';
 import FormCRM from '../components/FormCRM';
 
 export default function CRM({navigation}) {
     const [isAdd, setAdd] = useState(false);
     let [listData, setListData] = useState([]);
+    console.log('listData', listData);
+    
 
     const addNote = (note) => {
         setListData([...listData, note]);
@@ -15,11 +16,13 @@ export default function CRM({navigation}) {
 
     const renderList = () => {
         if(listData && listData.length !== 0){
+            let jsx = []
             for(let item of listData){
-                <View>{item.name}</View>
+                jsx.push(<Text>{item.name}</Text>) 
             }
+            return jsx;
         } else {
-            return <View style={styles.emptyBox}>Нет данных</View>
+            return <View style={styles.emptyBox}><Text>Нет данных</Text></View>
         }
         
     }
@@ -29,10 +32,10 @@ export default function CRM({navigation}) {
             return <FormCRM addNote={addNote} goBack={setAdd}/>
         } else {
             return (
-                <>
-                <Button title='Добавить запись' onPress={() => setAdd(true)}/>
-                {renderList()}
-                </> 
+                <View style={styles.wrapper}>
+                    <Button title='Добавить запись' onPress={() => setAdd(true)}/>
+                    {renderList()}
+                </View> 
             )
         }
     }
@@ -48,12 +51,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        padding: 20,
         alignItems: 'center',
-        justifyContent: 'center',
     },
     emptyBox: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    wrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        
     }
 });

@@ -15,7 +15,7 @@ export default function FormCRM({addNote, goBack}) {
     });
 
     const handlerChangeField = (name, value) => {
-        let newData = structuredClone(note);
+        let newData = {...note};
         newData[name] = value;
         setNote(newData)
     };
@@ -39,5 +39,7 @@ export default function FormCRM({addNote, goBack}) {
   }
 
 const styles = StyleSheet.create({
-
+  container: {
+    width: '80%',
+  }
 });
