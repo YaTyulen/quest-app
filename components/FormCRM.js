@@ -1,8 +1,12 @@
-import { StyleSheet, Text, SafeAreaView, Button, ScrollView, FlatList } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, SafeAreaView, Button, ScrollView, FlatList, View } from 'react-native';
 
 import { Input } from '@rneui/themed';
-import { useState } from 'react';
+import {collection, addDoc} from 'firebase/firestore';
+import {db} from '../firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 let count = 0;
+
 
 const fields = [
   {
@@ -37,7 +41,7 @@ const fields = [
   },
 ]
 
-export default function FormCRM({addNote, goBack}) {
+export default function FormCRM({goBack}) {
     
   const [note, setNote] = useState({
     name: '',
@@ -46,6 +50,7 @@ export default function FormCRM({addNote, goBack}) {
     cost: '',
     date: '',
     comment: '',
+    user: ''
   });
 
   const handlerChangeField = (name, value) => {
@@ -55,8 +60,19 @@ export default function FormCRM({addNote, goBack}) {
     setNote(newData)
   };
 
-  const handlerSave = () => {
+  const addNote = async (note) => {
+    try {
+      await addDoc(collection(db, "games"), note);
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handlerSave = async () => {
+    note.user = await AsyncStorage.getItem('user');
+    console.log(note);
     addNote(note);
+    //addNote(note);
     goBack();
   }
 
@@ -67,13 +83,16 @@ export default function FormCRM({addNote, goBack}) {
         renderItem={({item}) => <Input placeholder={item.nameRU} value={note[item.name]} onChangeText={(event) => {handlerChangeField(item.name, event)}}/>}
         keyExtractor={item => item.key}
       />
-      <Button title="Отправить" onPress={() => handlerSave()}/>
+      <View>
+        <Button title="Отправить" onPress={() => handlerSave()}/>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: '80%',
+    display: 'flex',
+    alignItems: 'center'
   }
 });

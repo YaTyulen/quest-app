@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, SafeAreaView } from 'react-native';
 import MainStack from './router';
+import Auth from './page/Auth';
 
 export default function App() {
-  return (
-    <MainStack/>
-  );
+
+  return <MainStack/>
 }
 
 const styles = StyleSheet.create({
