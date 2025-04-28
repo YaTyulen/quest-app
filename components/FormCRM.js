@@ -1,42 +1,76 @@
-import { StyleSheet, Text, SafeAreaView, Button } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Button, ScrollView, FlatList } from 'react-native';
 
 import { Input } from '@rneui/themed';
 import { useState } from 'react';
+let count = 0;
+
+const fields = [
+  {
+    key: '1',
+    name: 'name',
+    nameRU: 'Имя'
+  },
+  {
+    key: '2',
+    name: 'phone',
+    nameRU: 'Телефон'
+  },
+  {
+    key: '3',
+    name: 'players',
+    nameRU: 'Количество игроков'
+  },
+  {
+    key: '4',
+    name: 'cost',
+    nameRU: 'Стоимость'
+  },
+  {
+    key: '5',
+    name: 'date',
+    nameRU: 'Дата игры'
+  },
+  {
+    key: '6',
+    name: 'comment',
+    nameRU: 'Комментарий'
+  },
+]
 
 export default function FormCRM({addNote, goBack}) {
     
-    const [note, setNote] = useState({
-        name: '',
-        phone: '',
-        players: '',
-        cost: '',
-        date: '',
-        comment: '',
-    });
+  const [note, setNote] = useState({
+    name: '',
+    phone: '',
+    players: '',
+    cost: '',
+    date: '',
+    comment: '',
+  });
 
-    const handlerChangeField = (name, value) => {
-        let newData = {...note};
-        newData[name] = value;
-        setNote(newData)
-    };
+  const handlerChangeField = (name, value) => {
+    count+= 1;
+    let newData = {...note, key: count};
+    newData[name] = value;
+    setNote(newData)
+  };
 
-    const handlerSave = () => {
-        addNote(note);
-        goBack();
-    }
-
-    return (
-      <SafeAreaView style={styles.container}>
-        <Input placeholder='Имя' value={note.name} onChangeText={(event) => {handlerChangeField('name', event)}}/>
-        <Input placeholder='Телефон' value={note.phone} onChangeText={(event) => {handlerChangeField('phone', event)}}/>
-        <Input placeholder='Количество игроков' value={note.players} onChangeText={(event) => {handlerChangeField('players', event)}}/>
-        <Input placeholder='Стоимость' value={note.cost} onChangeText={(event) => {handlerChangeField('cost', event)}}/>
-        <Input placeholder='Дата игры' value={note.date} onChangeText={(event) => {handlerChangeField('date', event)}}/>
-        <Input placeholder='Комментарий' value={note.comment} onChangeText={(event) => {handlerChangeField('comment', event)}}/>
-        <Button title="Отправить" onPress={() => handlerSave()}/>
-      </SafeAreaView>
-    );
+  const handlerSave = () => {
+    addNote(note);
+    goBack();
   }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={fields}
+        renderItem={({item}) => <Input placeholder={item.nameRU} value={note[item.name]} onChangeText={(event) => {handlerChangeField(item.name, event)}}/>}
+        keyExtractor={item => item.key}
+      />
+      <Button title="Отправить" onPress={() => handlerSave()}/>
+    </SafeAreaView>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
