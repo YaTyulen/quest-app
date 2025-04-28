@@ -5,12 +5,14 @@ import CRM from './page/CRM';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import FormCRM from './components/FormCRM';
+import Auth from './page/Auth';
 
 const Stack = createStackNavigator();
 
 export default function Router() {
     return <NavigationContainer>
         <Stack.Navigator>
+            <Stack.Screen name="Auth" component={Auth} options={{title: 'Авторизация'}}/>
             <Stack.Screen name="Home" component={Home} options={{title: 'Главная'}}/>
             <Stack.Screen name="TimeTable" component={TimeTable} options={{title: 'Расписание'}}/>
             <Stack.Screen name="CRM" component={CRM} options={{title: 'История посещений'}}/>
